@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Study Strategy Quiz</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fa;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .question {
+        margin-bottom: 20px;
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #4b7bec;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #3867d6;
+    }
+
+    #result {
+        margin-top: 30px;
+        padding: 20px;
+        background: #dff0d8;
+        border-left: 6px solid #27ae60;
+        display: none;
+        border-radius: 8px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Study Strategy Quiz</h1>
+    <p>Answer these questions to discover the study method that suits you best.</p>
+
+    <div id="quiz"></div>
+    <div id="result"></div>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "1. When studying, what frustrates you the most?",
+        a: ["Not knowing where to start", "Getting bored easily", "Forgetting what I learned", "Feeling overwhelmed by big tasks"]
+    },
+    {
+        q: "2. What environment helps you focus best?",
+        a: ["Quiet room", "Café background noise", "Music", "Library-style structured space"]
+    },
+    {
+        q: "3. How do you usually take notes?",
+        a: ["Digital notes", "Quick messy notes", "Flashcards", "Neat organized outlines"]
+    },
+    {
+        q: "4. What motivates you?",
+        a: ["Clear checklist", "Short bursts of progress", "Seeing memorization improvements", "Having a structured plan"]
+    },
+    {
+        q: "5. What do you struggle with most?",
+        a: ["Getting started", "Staying consistent", "Remembering information", "Time management"]
+    },
+    {
+        q: "6. What type of learner are you?",
+        a: ["Visual", "Kinesthetic", "Auditory", "Logical/Structured"]
+    },
+    {
+        q: "7. What study tool do you prefer?",
+        a: ["Planners", "Timers (Pomodoro)", "Flashcards", "Templates/schedules"]
+    },
+    {
+        q: "8. What describes your typical study session?",
+        a: ["Organized but slow", "Fast but unfocused", "Memorizing a lot", "Structured and planned"]
+    }
+];
+
+let scores = { planner: 0, pomodoro: 0, memory: 0, structured: 0 };
+
+function answerQuestion(type) {
+    if (type === 0) scores.planner++;
+    if (type === 1) scores.pomodoro++;
+    if (type === 2) scores.memory++;
+    if (type === 3) scores.structured++;
+
+    current++;
+    loadQuestion();
+}
+
+let current = 0;
+
+function loadQuestion() {
+    const quizDiv = document.getElementById("quiz");
+
+    if (current >= questions.length) {
+        showResult();
+        return;
+    }
+
+    const q = questions[current];
+    quizDiv.innerHTML = `
+        <div class="question">
+            <h3>${q.q}</h3>
+            ${q.a.map((choice, index) => 
+                `<button onclick="answerQuestion(${index})">${choice}</button>`
+            ).join("")}
+        </div>
+    `;
+}
+
+function showResult() {
+    const quizDiv = document.getElementById("quiz");
+    quizDiv.innerHTML = "";
+
+    let result = document.getElementById("result");
+    result.style.display = "block";
+
+    let best = Object.keys(scores).reduce((a,b) => scores[a] > scores[b] ? a : b);
+
+    let message = "";
+
+    if (best === "planner") message = "🗂 You are a **Planner Learner** – Use checklists, agenda, and structured steps.";
+    if (best === "pomodoro") message = "⏳ You are a **Pomodoro Learner** – Short focused bursts work best for you.";
+    if (best === "memory") message = "🧠 You are a **Memory Learner** – Flashcards, spaced repetition, and quizzes suit you.";
+    if (best === "structured") message = "📚 You are a **Structured Learner** – Templates, schedules, and routines help you thrive.";
+
+    result.innerHTML = "<h2>Your Study Strategy:</h2><p>" + message + "</p>";
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
